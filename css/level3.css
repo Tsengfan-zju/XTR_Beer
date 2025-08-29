@@ -1,0 +1,174 @@
+/* Level3页面容器 */
+.level3-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 头部样式 */
+.level3-header {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.level3-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.level3-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* 主内容区样式 */
+.level3-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #f5576c;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* 功能选择器样式 */
+.function-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.function-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.function-btn:hover {
+  background-color: #d0d0d0;
+}
+
+.function-btn.active {
+  background-color: #f5576c;
+  color: white;
+}
+
+/* 功能内容区域样式 */
+.function-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* 数据分析内容样式 */
+.analytics-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.analytics-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.analytics-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.analytics-section p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 系统设置内容样式 */
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.setting-item label {
+  font-weight: 500;
+  color: #333;
+}
+
+.setting-item input,
+.setting-item select {
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.setting-item button {
+  align-self: flex-start;
+}
+
+/* 返回首页按钮容器 */
+.return-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .level3-header {
+    padding: 1.5rem 1rem;
+  }
+  
+  .level3-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .function-selector {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .analytics-section h3 {
+    font-size: 1.2rem;
+  }
+  
+  .setting-item button {
+    align-self: stretch;
+  }
+}

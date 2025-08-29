@@ -1,0 +1,181 @@
+/* Level1页面容器 */
+.level1-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 头部样式 */
+.level1-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.level1-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.level1-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* 主内容区样式 */
+.level1-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* 场景选择器样式 */
+.scenario-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.scenario-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.scenario-btn:hover {
+  background-color: #d0d0d0;
+}
+
+.scenario-btn.active {
+  background-color: #667eea;
+  color: white;
+}
+
+/* 步骤导航器样式 */
+.step-navigator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.step-indicators {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.step-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  background-color: #667eea;
+  transform: scale(1.2);
+}
+
+.step-indicator:hover {
+  background-color: #d0d0d0;
+}
+
+/* 步骤内容样式 */
+.step-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.step-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.step-description {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 步骤控制按钮样式 */
+.step-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.step-controls button {
+  min-width: 120px;
+}
+
+.step-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .level1-header {
+    padding: 1.5rem 1rem;
+  }
+  
+  .level1-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .scenario-selector {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .step-title {
+    font-size: 1.5rem;
+  }
+  
+  .step-description {
+    font-size: 1rem;
+  }
+  
+  .step-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}

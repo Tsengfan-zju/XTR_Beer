@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="../public/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用户使用指南 - 智能啤酒机使用教程</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/level1.css" />
+</head>
+<body>
+    <div class="level1-container">
+        <header class="level1-header">
+            <h1>用户使用指南</h1>
+            <p>了解如何使用啤酒机购买啤酒</p>
+        </header>
+
+        <main class="level1-main">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumb">
+                <a href="../index.html">首页</a> / <span>用户使用指南</span>
+            </div>
+
+            <!-- 场景选择器 -->
+            <div class="scenario-selector">
+                <button class="scenario-btn active" data-scenario="normal">正常情况</button>
+                <button class="scenario-btn" data-scenario="timeout">超时情况</button>
+                <button class="scenario-btn" data-scenario="soldout">售罄情况</button>
+            </div>
+
+            <!-- 步骤导航器 -->
+            <div class="step-navigator">
+                <div class="step-indicators" id="stepIndicators"></div>
+            </div>
+
+            <!-- 当前步骤内容 -->
+            <div class="step-content" id="stepContent">
+                <!-- 步骤内容将通过JavaScript动态生成 -->
+            </div>
+
+            <!-- 步骤控制按钮 -->
+            <div class="step-controls">
+                <button id="prevStep" disabled>上一步</button>
+                <button id="nextStep">下一步</button>
+            </div>
+        </main>
+    </div>
+    <script src="../js/level1.js"></script>
+</body>
+</html>

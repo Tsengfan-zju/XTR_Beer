@@ -1,0 +1,131 @@
+/* Home页面容器 */
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 头部样式 */
+.home-header {
+  background: linear-gradient(135deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  color: white;
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.home-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.home-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* 主内容区样式 */
+.home-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 英雄图片样式 */
+.hero-image {
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 400px;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" fill="%23e0e0e0"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="24" fill="%23999">公司大图占位</text></svg>');
+}
+
+/* 介绍文本样式 */
+.intro-text {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.intro-text h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* 角色选择卡片样式 */
+.role-selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.role-card {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.role-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.role-card p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .home-header {
+    padding: 2rem 1rem;
+  }
+  
+  .home-header h1 {
+    font-size: 2rem;
+  }
+  
+  .placeholder-image {
+    height: 300px;
+  }
+  
+  .intro-text h2 {
+    font-size: 1.8rem;
+  }
+  
+  .role-selection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
