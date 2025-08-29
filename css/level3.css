@@ -1,174 +1,258 @@
-/* Level3页面容器 */
+/* level3.css - 老板管理指南页面样式 */
+
+/* 页面容器 */
 .level3-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
 }
 
-/* 头部样式 */
+/* 页面头部 */
 .level3-header {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  text-align: center;
-  padding: 2rem 1rem;
-  margin-bottom: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .level3-header h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .level3-header p {
-  font-size: 1.1rem;
-  opacity: 0.9;
+    font-size: 1.1rem;
+    color: #666;
 }
 
-/* 主内容区样式 */
+/* 主内容区 */
 .level3-main {
-  flex: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 /* 面包屑导航 */
 .breadcrumb {
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  color: #666;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
 }
 
 .breadcrumb a {
-  color: #f5576c;
-  text-decoration: none;
+    color: #007bff;
+    text-decoration: none;
 }
 
 .breadcrumb a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
-/* 功能选择器样式 */
-.function-selector {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+/* 场景选择器 */
+.scenario-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 20px;
 }
 
-.function-btn {
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 5px;
-  background-color: #e0e0e0;
-  color: #333;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 150px;
+.scenario-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.function-btn:hover {
-  background-color: #d0d0d0;
+.scenario-btn.active {
+    background-color: #007bff;
+    color: white;
 }
 
-.function-btn.active {
-  background-color: #f5576c;
-  color: white;
+.scenario-btn:hover:not(.active) {
+    background-color: #e0e0e0;
 }
 
-/* 功能内容区域样式 */
-.function-content {
-  background: white;
-  border-radius: 10px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+/* 步骤导航器 */
+.step-navigator {
+    margin-bottom: 30px;
 }
 
-/* 数据分析内容样式 */
-.analytics-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+/* 步骤指示器样式 */
+.step-indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
-.analytics-section {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1.5rem;
+.step-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
 }
 
-.analytics-section h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: #333;
+.step-indicator:hover {
+    background-color: #999;
 }
 
-.analytics-section p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
+.step-indicator.active {
+    background-color: #007bff;
+    transform: scale(1.2);
 }
 
-/* 系统设置内容样式 */
-.settings-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+/* 步骤内容区域 */
+.step-content {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
 }
 
-.setting-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+/* 内容包装器 - 图片和文字上下布局 */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.setting-item label {
-  font-weight: 500;
-  color: #333;
+/* 图片容器样式 */
+.image-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.setting-item input,
-.setting-item select {
-  padding: 0.7rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
+/* 步骤图片样式 - 保持600:1024的长宽比例 */
+.step-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    aspect-ratio: 600/1024;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.setting-item button {
-  align-self: flex-start;
+/* 文字容器样式 */
+.text-container {
+    text-align: center;
+    max-width: 600px;
 }
 
-/* 返回首页按钮容器 */
-.return-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
+.step-title {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.step-description {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 步骤控制按钮容器样式 */
+.step-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* 按钮基础样式 */
+.step-controls button {
+    padding: 10px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.step-controls button:not(:disabled) {
+    background-color: #007bff;
+    color: white;
+}
+
+.step-controls button:not(:disabled):hover {
+    background-color: #0056b3;
+}
+
+.step-controls button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* 响应式设计 - 在移动设备上调整布局 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    
+    .step-image {
+        max-width: 100%;
+        aspect-ratio: 600/1024;
+    }
+    
+    .text-container {
+        text-align: center;
+    }
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .level3-header {
-    padding: 1.5rem 1rem;
-  }
-  
-  .level3-header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .function-selector {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .analytics-section h3 {
-    font-size: 1.2rem;
-  }
-  
-  .setting-item button {
-    align-self: stretch;
-  }
+    .level3-container {
+        padding: 10px;
+    }
+
+    .level3-header h1 {
+        font-size: 2rem;
+    }
+
+    .level3-main {
+        padding: 20px;
+    }
+
+    .scenario-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .scenario-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .step-title {
+        font-size: 1.5rem;
+    }
+
+    .step-description {
+        font-size: 1rem;
+    }
+
+    .step-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .step-controls button {
+        width: 100%;
+        max-width: 200px;
+    }
 }

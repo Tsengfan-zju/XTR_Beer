@@ -33,23 +33,54 @@
   padding: 0 1rem;
 }
 
-/* 英雄图片样式 */
-.hero-image {
-  margin-bottom: 2rem;
+/* 公司信息区域样式 */
+.company-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: white;
   border-radius: 10px;
-  overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.placeholder-image {
-  width: 100%;
-  height: 400px;
-  background-color: #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.company-intro {
+  flex: 1;
+}
+
+.company-intro h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.company-intro p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.company-image-container {
+  flex: 0 0 auto;
+}
+
+.company-image {
+  max-width: 300px;
+  height: auto;
   border-radius: 10px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" fill="%23e0e0e0"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="24" fill="%23999">公司大图占位</text></svg>');
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .company-info {
+    flex-direction: column;
+  }
+  
+  .company-image {
+    max-width: 100%;
+  }
 }
 
 /* 介绍文本样式 */

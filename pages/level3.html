@@ -21,20 +21,35 @@
                 <a href="../index.html">首页</a> / <span>老板管理指南</span>
             </div>
 
-            <!-- 功能选择器 -->
-            <div class="function-selector">
-                <button class="function-btn active" data-function="analytics">数据分析</button>
-                <button class="function-btn" data-function="settings">系统设置</button>
+            <!-- 场景选择器 -->
+            <div class="scenario-selector">
+                <button class="scenario-btn active" data-scenario="analytics">数据分析</button>
+                <button class="scenario-btn" data-scenario="settings">系统设置</button>
             </div>
 
-            <!-- 功能内容区域 -->
-            <div class="function-content" id="functionContent">
-                <!-- 内容将通过JavaScript动态生成 -->
+            <!-- 步骤导航器 -->
+            <div class="step-navigator">
+                <div class="step-indicators" id="stepIndicators"></div>
             </div>
 
-            <!-- 返回首页按钮 -->
-            <div class="return-container">
-                <button id="returnHome" class="btn-primary">返回首页</button>
+            <!-- 当前步骤内容 -->
+            <div class="step-content" id="stepContent">
+                <!-- 步骤内容将通过JavaScript动态生成 -->
+                <div class="content-wrapper">
+                    <div class="image-container">
+                        <img src="" alt="步骤图片" class="step-image">
+                    </div>
+                    <div class="text-container">
+                        <h2 class="step-title"></h2>
+                        <p class="step-description"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤控制按钮 -->
+            <div class="step-controls">
+                <button id="prevStep" disabled>上一步</button>
+                <button id="nextStep">下一步</button>
             </div>
         </main>
     </div>
