@@ -1,27 +1,26 @@
 // 定义不同场景的步骤数据
 const scenarioData = {
     normal: [
-        { id: 1, title: '选择啤酒', description: '在主界面选择您喜欢的啤酒类型。系统会显示所有可用的啤酒选项。', image: '../picture/level1/1-1.png' },
-        { id: 2, title: '确认选择', description: '确认您的啤酒选择。检查价格和容量信息是否正确。', image: '../picture/level1/1-2.jpg' },
-        { id: 3, title: '支付方式', description: '选择支付方式，可以使用微信支付、支付宝或银行卡支付。', image: '../picture/level1/1-3.jpg' },
-        { id: 4, title: '扫码支付', description: '使用手机扫描屏幕上的二维码进行支付。', image: '../picture/level1/1-4.jpg' },
-        { id: 5, title: '等待出酒', description: '支付成功后，系统开始出酒。请耐心等待啤酒完全流出。', image: '../picture/level1/1-5.jpg' },
-        { id: 6, title: '取酒完成', description: '啤酒已经准备好，请取走您的啤酒并享受。记得拿走您的银行卡或手机。', image: '../picture/level1/1-6.png' }
+        { id: 1, title: '来一杯', description: '此页显示当前啤酒的单价与单次打酒量，用户点击"来一杯"按钮，开始购买。', image: '../picture/level1/1-1.png' },
+        { id: 2, title: '付款', description: '显示付款二维码与当前购买的信息，用户扫码支付，完成支付后，支付界面将自动跳转至下一个界面。', image: '../picture/level1/1-2.jpg' },
+        { id: 3, title: '开始打酒', description: '用户扫码完成支付后，系统会自动识别支付成功并准备打酒，开启30s倒计时。若打酒过程中，杯满需要退出打酒，用户可点击左上角返回键，后台累计本次实际出酒量。', image: '../picture/level1/1-3.jpg' },
+        { id: 4, title: '打酒中', description: '系统开始倒酒，显示倒酒进度与脉冲。若检测到脉冲，倒计时会重新更新为30s，确保用户有足够的时间打酒。', image: '../picture/level1/1-4.jpg' },
+        { id: 5, title: '打酒完成', description: '当打酒完成后，界面上会显示"已完成"，并进入3秒自动返回流程。', image: '../picture/level1/1-5.jpg' },
+        { id: 6, title: '返回首页', description: '倒酒完成后，系统进行3秒倒计时，后台累计本次实际出酒量，用户回到首页准备下一次操作。', image: '../picture/level1/1-6.png' }
     ],
     timeout: [
-        { id: 1, title: '操作超时提示', description: '系统显示操作超时提示，提示您的操作已经超过了规定时间。', image: '../picture/level1/2-1.png' },
-        { id: 2, title: '返回主界面', description: '系统自动返回主界面，您可以重新开始选择啤酒的流程。', image: '../picture/level1/2-2.jpg' },
-        { id: 3, title: '重新选择', description: '在主界面重新选择您喜欢的啤酒类型，系统会重新计时。', image: '../picture/level1/2-3.jpg' },
-        { id: 4, title: '快速操作', description: '尽量在规定时间内完成操作，避免再次超时。', image: '../picture/level1/2-4.jpg' },
-        { id: 5, title: '联系客服', description: '如果频繁出现超时问题，可以联系客服寻求帮助。', image: '../picture/level1/2-5.png' }
+        { id: 1, title: '来一杯', description: '此页显示当前啤酒的单价与单次打酒量，用户点击"来一杯"按钮，开始购买。', image: '../picture/level1/2-1.png' },
+        { id: 2, title: '付款', description: '显示付款二维码与当前购买的信息，用户扫码支付，完成支付后，支付界面将自动跳转至下一个界面。', image: '../picture/level1/2-2.jpg' },
+        { id: 3, title: '开始打酒', description: '用户扫码完成支付后，系统会自动识别支付成功并准备打酒，开启30s倒计时。若打酒过程中，杯满需要退出打酒，用户可点击左上角返回键，后台累计本次实际出酒量。', image: '../picture/level1/2-3.jpg' },
+        { id: 4, title: '超时', description: '若用户在规定时间内未拉动打酒手柄进行打酒，倒计时结束后将自动执行结束流程，防止打酒头长期被占用。此时可联系店员进行重打。若用户中途拉动打酒手柄打酒，倒计时重新更新为30s，确保用户有足够的时间打酒。', image: '../picture/level1/2-4.jpg' },
+        { id: 5, title: '返回首页', description: '超时后，系统进行3秒倒计时，后台累计本次实际出酒量，用户回到首页准备下一次操作。', image: '../picture/level1/2-5.png' }
     ],
     soldout: [
-        { id: 1, title: '售罄提示', description: '当您选择的啤酒显示为售罄状态时，系统会有明确的提示。', image: '../picture/level1/3-1.png' },
-        { id: 2, title: '选择其他啤酒', description: '系统会引导您选择其他可用的啤酒类型。', image: '../picture/level1/3-2.jpg' },
-        { id: 3, title: '查看补货时间', description: '有些系统会显示下一次补货的预计时间。', image: '../picture/level1/3-3.jpg' },
-        { id: 4, title: '添加到提醒列表', description: '您可以将售罄的啤酒添加到提醒列表，以便补货后收到通知。', image: '../picture/level1/3-4.jpg' },
-        { id: 5, title: '推荐类似啤酒', description: '系统会根据您的喜好推荐类似口味的啤酒。', image: '../picture/level1/3-5.jpg' },
-        { id: 6, title: '继续购买', description: '选择替代啤酒后，继续购买流程。', image: '../picture/level1/3-6.jpg' }
+        { id: 1, title: '来一杯', description: '此页显示当前啤酒的单价与单次打酒量，用户点击"来一杯"按钮，开始购买。显示付款二维码与当前购买的信息，用户扫码支付，完成支付后，支付界面将自动跳转至下一个界面。', image: '../picture/level1/3-1.png' },
+        { id: 2, title: '付款', description: '用户扫码完成支付后，系统会自动识别支付成功并准备打酒，开启30s倒计时。若打酒过程中，杯满需要退出打酒，用户可点击左上角返回键，后台累计本次实际出酒量。', image: '../picture/level1/3-2.jpg' },
+        { id: 3, title: '开始打酒', description: '系统开始倒酒，显示倒酒进度与脉冲。若检测到脉冲，倒计时会重新更新为30s，确保用户有足够的时间打酒。', image: '../picture/level1/3-3.jpg' },
+        { id: 4, title: '打酒完成', description: '当打酒完成后，界面上会显示"已完成"，并进入3秒自动返回流程。', image: '../picture/level1/3-4.jpg' },
+        { id: 5, title: '售罄', description: '倒酒完成后，系统进行3秒倒计时，后台累计本次实际出酒量，若累计酒量达到警戒值，则跳转至售罄界面。用户需联系店员更换酒桶。', image: '../picture/level1/3-5.jpg' }
     ]
 };
 
