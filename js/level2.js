@@ -1,17 +1,17 @@
 // 定义不同场景的步骤数据
 const scenarioData = {
     management: [
-        { id: 1, title: '进入管理模式', description: '首先需要输入管理员密码进入管理模式。通常在设备背面或侧面有物理按钮或密码输入区域。', image: '../picture/level2/1-1.png' },
-        { id: 2, title: '查看库存状态', description: '在管理模式下，您可以查看每种啤酒的库存状态，了解哪些啤酒需要补货。', image: '../picture/level2/1-2.png' },
-        { id: 3, title: '清洁维护', description: '按照系统提示进行定期清洁维护，包括出酒口、接酒区域和设备外部的清洁。', image: '../picture/level2/1-3.png' }
+        { id: 1, title: '点击热区', description: '店员长按右上角隐藏热区1-3s，输入店员密码，初始密码为123456（尽快修改），进入运营后台。', image: '../picture/level2/1-1.png' },
+        { id: 2, title: '运营后台', description: '运营后台展示可更改的各项参数，点击即可编辑。\n\n第一部分：基本参数\n● 名称：当前酒的名称（其他：点击其他，可选择已另存的酒类）\n● 单价：单次出酒量对应的价格\n● 限制时间：单次打酒的倒计时\n● 单次出酒：单次打酒的毫升数\n● 容器总量：酒桶的容量\n● 报警阈值：当酒桶的容量为多少时，停止售卖\n● 累计售卖：目前已售卖的酒量，不可编辑（清零：点击清零后，累计售卖清零。注意在每次更换酒桶后需要手动清零，否则将引起“售罄”现象）\n\n第二部分脉冲系数校准：\n● 出酒量： 校准的出酒量\n● 脉冲数： 校准的出酒量所对应的脉冲数\n● 脉冲系数：脉冲数/出酒量的比值\n\n保存：每次修改后必须保存本次修改\n另存为：将本套方案另存至配方，方便下次直接选择该方案', image: '../picture/level2/1-2.png' },
+        { id: 3, title: '配方管理', description: '点击其他后，将进入已经保存的配方管理界面，共10个保存的槽位。点击不同的槽位，会在预览区显示该槽位保存的内容。点击应用，使用该槽位的相关参数；点击删除，清空该槽位。', image: '../picture/level2/1-3.png' }
     ],
     pulse: [
-        { id: 1, title: '准备脉冲测试', description: '在进行脉冲测试前，请确保设备已断电，并已断开所有外部连接。', image: '../picture/level2/2-1.png' },
-        { id: 2, title: '进入测试模式', description: '按照设备说明书的指导进入脉冲测试模式。通常需要同时按住特定的按钮组合。', image: '../picture/level2/2-2.jpg' },
-        { id: 3, title: '执行脉冲测试', description: '在测试模式下，启动脉冲测试功能，观察设备是否能够正常响应脉冲信号。', image: '../picture/level2/2-3.jpg' },
-        { id: 4, title: '记录测试结果', description: '记录测试过程中观察到的任何异常情况，包括声音、指示灯状态等。', image: '../picture/level2/2-4.jpg' },
-        { id: 5, title: '分析测试数据', description: '根据测试结果分析设备的运行状态，判断是否存在需要维修的部件。', image: '../picture/level2/2-5.jpg' },
-        { id: 6, title: '完成测试', description: '测试完成后，退出测试模式，重新连接所有外部设备，并恢复正常供电。', image: '../picture/level2/2-6.png' }
+        { id: 1, title: '来一杯', description: '店员通过打酒页面的脉冲数进行脉冲校准。因此需要使用正常用户的付款流程。店员点击"来一杯"按钮，开始测试。', image: '../picture/level2/2-1.png' },
+        { id: 2, title: '付款', description: '店员扫码支付，完成支付后，支付界面将自动跳转至下一个界面。', image: '../picture/level2/2-2.jpg' },
+        { id: 3, title: '开始打酒', description: '店员扫码完成支付后，系统会自动识别支付成功并准备打酒，开启30s倒计时。', image: '../picture/level2/2-3.jpg' },
+        { id: 4, title: '记录脉冲数', description: '系统开始倒酒，显示倒酒进度与脉冲。忽略设备上显示的毫升数，店员通过记录脉冲数，使用量杯测试固定脉冲数打出多少真实毫升。脉冲数可在运营后台界面进行设置，如本次需要测试100个脉冲会打多少毫升的酒，店员需在运营后台界面设置脉冲数为100。', image: '../picture/level2/2-4.jpg' },
+        { id: 5, title: '完成校准', description: '店员记录本次的脉冲数，测试打出的真实毫升数，在管理界面修改对应脉冲数对应的真实毫升数，完成校准。', image: '../picture/level2/2-5.jpg' },
+        { id: 6, title: '返回首页', description: '倒酒完成后，系统进行3秒倒计时，后台累计本次实际出酒量，回到首页准备下一次操作。', image: '../picture/level2/2-6.png' }
     ]
 };
 
