@@ -66,8 +66,8 @@ function initPage() {
     // 初始化返回首页按钮事件监听
     returnHomeBtn.addEventListener('click', returnToHome);
     
-    // 初始化显示一般问题
-    changeCategory('general');
+    // 初始化显示常见问题
+    changeCategory('boss');
 }
 
 // 切换问题分类
