@@ -149,6 +149,37 @@
   margin-bottom: 2rem;
 }
 
+/* 默认参数容器样式 */
+.defaults-container {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.defaults-container h3 {
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.defaults-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.defaults-content p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0.8rem 1.2rem;
+  background-color: #f5f9ff;
+  border-left: 3px solid #4facfe;
+  border-radius: 4px;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .level4-header {

@@ -34,6 +34,16 @@ const faqData = {
         { question: '可以自定义啤酒的口味吗？', answer: '目前我们的智能啤酒机主要提供预设的啤酒口味。不过，我们正在开发支持自定义口味的功能，敬请期待。' },
         { question: '如何成为我们的合作伙伴？', answer: '如果您有兴趣成为我们的合作伙伴，可以通过官方网站或客服电话联系我们的商务合作团队。我们会为您提供详细的合作方案和支持政策。' },
         { question: '啤酒机适合安装在哪些场所？', answer: '我们的智能啤酒机适合安装在多种场所，包括酒吧、餐厅、商场、办公楼、体育场馆等。只要有稳定的电源和网络连接，就可以安装和使用我们的啤酒机。' }
+    ],
+    boss: [
+        { question: '一直显示"暂停/售罄"', answer: '● 检查是否在售、是否更换酒桶；\n● 看"容器容量 − 累计售卖"是否大于报警阈值；\n● 更换酒桶后别忘了清零累计并设置新桶容量。' },
+        { question: '扫码后不出酒', answer: '● 支付后台修改了前缀/后缀后，务必保存并回到支付页试扫，确保可以正常付款；' },
+        { question: '出酒超时', answer: '● 默认 30s；10s 时已发送 T_OUT，语音播报即将超时请尽快打酒，0s 时发送 T_OVER，提示超时，然后照常 3 秒返回；\n● 可在管理页调大限制时间。' },
+        { question: '出酒量不准/泡沫多', answer: '● 用量杯做一次脉冲校准（500ml/脉冲数→保存）。' },
+        { question: '忘记管理员密码', answer: '● 使用左上角的恢复出厂设置热区，恢复后 PIN1 变为 123456。' }
+    ],
+    defaults: [
+        { question: '默认参数一览（出厂设置）', answer: '● 名称：青岛啤酒｜价格：18.88 元/500ml\n● 单次出酒：500ml｜容器容量：10000ml\n● 报警阈值：200ml｜限制时间：30s\n● 累计售卖：0ml｜脉冲校准：500ml / 400 脉冲（ppml=0.8）\n● 管理员 PIN1：123456（请尽快修改）' }
     ]
 };
 
@@ -81,30 +91,59 @@ function generateFaqList(category) {
     faqList.innerHTML = '';
     const faqs = faqData[category];
     
-    faqs.forEach((faq, index) => {
-        const faqItem = document.createElement('div');
-        faqItem.classList.add('faq-item');
+    // 默认参数分类特殊处理
+    if (category === 'defaults') {
+        const defaultsContainer = document.createElement('div');
+        defaultsContainer.classList.add('defaults-container');
         
-        const questionBtn = document.createElement('button');
-        questionBtn.classList.add('faq-question');
-        questionBtn.textContent = faq.question;
-        
-        const answerDiv = document.createElement('div');
-        answerDiv.classList.add('faq-answer');
-        const answerPara = document.createElement('p');
-        answerPara.textContent = faq.answer;
-        answerDiv.appendChild(answerPara);
-        
-        faqItem.appendChild(questionBtn);
-        faqItem.appendChild(answerDiv);
-        faqList.appendChild(faqItem);
-        
-        // 添加问题点击事件
-        questionBtn.addEventListener('click', () => {
-            questionBtn.classList.toggle('active');
-            answerDiv.classList.toggle('active');
+        faqs.forEach(faq => {
+            const title = document.createElement('h3');
+            title.textContent = faq.question;
+            
+            const content = document.createElement('div');
+            content.classList.add('defaults-content');
+            
+            // 将文本中的换行符转换为HTML的br标签
+            const paragraphs = faq.answer.split('\n');
+            paragraphs.forEach(para => {
+                const p = document.createElement('p');
+                p.innerHTML = para.replace(/\n/g, '<br>');
+                content.appendChild(p);
+            });
+            
+            defaultsContainer.appendChild(title);
+            defaultsContainer.appendChild(content);
         });
-    });
+        
+        faqList.appendChild(defaultsContainer);
+    } else {
+        // 普通问题列表处理
+        faqs.forEach((faq, index) => {
+            const faqItem = document.createElement('div');
+            faqItem.classList.add('faq-item');
+            
+            const questionBtn = document.createElement('button');
+            questionBtn.classList.add('faq-question');
+            questionBtn.textContent = faq.question;
+            
+            const answerDiv = document.createElement('div');
+            answerDiv.classList.add('faq-answer');
+            const answerPara = document.createElement('p');
+            // 将文本中的换行符转换为HTML的br标签
+            answerPara.innerHTML = faq.answer.replace(/\n/g, '<br>');
+            answerDiv.appendChild(answerPara);
+            
+            faqItem.appendChild(questionBtn);
+            faqItem.appendChild(answerDiv);
+            faqList.appendChild(faqItem);
+            
+            // 添加问题点击事件
+            questionBtn.addEventListener('click', () => {
+                questionBtn.classList.toggle('active');
+                answerDiv.classList.toggle('active');
+            });
+        });
+    }
 }
 
 // 返回首页
