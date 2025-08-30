@@ -1,33 +1,38 @@
 // 场景数据定义
 const scenarioData = {
-    analytics: [
+    management: [
         {
-            title: "销售数据概览",
-            description: "查看每日、每周和每月的销售总额和趋势分析，帮助您了解业务状况。",
+            title: "点击一级热区",
+            description: "老板长按右上角隐藏热区1-3s，输入店员密码，初始密码为123456（尽快修改），进入运营后台。",
             image: "../picture/level3/1-1.png"
         },
         {
-            title: "销量排行榜",
-            description: "查看各种啤酒的销量排名，了解哪些产品最受欢迎，优化进货决策。",
+            title: "点击二级热区",
+            description: "老板长按右上角隐藏热区1-3s，输入老板二级密码（二级密码将在售卖设备时告知，请务必妥善保管），进入支付后台。",
             image: "../picture/level3/1-2.png"
         },
         {
-            title: "库存预警",
-            description: "实时监控各款啤酒的库存状态，当库存不足时及时收到预警通知。",
+            title: "支付后台",
+            description: "在该页可修改店员一级密码及收款信息。通常可保持收款网址，仅需修改收款编码，具体收钱吧收款码申请地址在本网站后续有介绍。修改后点击保存，保存本次修改信息。",
             image: "../picture/level3/1-3.png"
         }
     ],
-    settings: [
+    reset: [
         {
-            title: "系统设置",
-            description: "这里是系统设置",
+            title: "点击初始化热区",
+            description: "老板长按左上角隐藏热区1-3s，输入初始化三级密码（三级密码将在售卖设备时告知，请务必妥善保管），将本机恢复出厂设置。出厂设置参数见本网站后续内容。",
+            image: "../picture/level3/2-1.png"
+        },
+        {
+            title: "恢复初始化",
+            description: "恢复出厂设置后请尽快更改默认一级密码123456。",
             image: "../picture/level3/2-1.png"
         }
     ]
 };
 
 // 当前状态
-let currentScenario = "analytics";
+let currentScenario = "management";
 let currentStep = 0;
 
 // DOM元素
@@ -109,9 +114,13 @@ function updateStepContent() {
     const currentStepData = steps[currentStep];
     
     // 更新DOM内容
-    stepImage.src = currentStepData.image;
+    if (currentStepData.image) {
+        stepImage.src = currentStepData.image;
+        stepImage.alt = currentStepData.title;
+    }
     stepTitle.textContent = currentStepData.title;
-    stepDescription.textContent = currentStepData.description;
+    // 将文本中的换行符转换为HTML的br标签，确保正确换行显示
+    stepDescription.innerHTML = currentStepData.description.replace(/\n/g, '<br>');
 }
 
 // 更新控制按钮状态函数
