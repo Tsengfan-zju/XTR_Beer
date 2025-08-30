@@ -45,20 +45,38 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.company-intro {
+/* 关于我们链接样式 */
+.about-link {
   flex: 1;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
-.company-intro h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #333;
+.about-link h3 {
+  font-size: 1.8rem;
+  color: #007bff;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.about-link:hover h3 {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* 公司介绍样式 */
+.company-intro {
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .company-intro p {
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #666;
+  margin: 0.5rem 0;
 }
 
 .company-image-container {

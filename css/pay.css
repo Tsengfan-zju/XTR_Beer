@@ -1,0 +1,220 @@
+/* 收钱吧开通流程页面样式 */
+
+/* 页面容器 */
+.pay-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 头部样式 */
+.pay-header {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.pay-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.pay-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* 主内容区样式 */
+.pay-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #4facfe;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* 步骤导航概览 - 隐藏 */
+.step-overview {
+  display: none;
+}
+
+/* 所有步骤容器 */
+.all-steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* 单个步骤内容 */
+.step-item {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.step-item-header {
+  padding: 1.2rem 1.5rem;
+  background: linear-gradient(90deg, rgba(79,172,254,0.1) 0%, rgba(0,242,254,0.1) 100%);
+  border-left: 4px solid #4facfe;
+}
+
+.step-item-header h2 {
+  font-size: 1.3rem;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.step-number-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: #4facfe;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-right: 0.8rem;
+}
+
+/* 步骤内容 */
+.step-item-content {
+  padding: 1.5rem;
+}
+
+.step-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 文字内容在图片上方 */
+.text-content {
+  text-align: left;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+}
+
+/* 图片容器 - 默认宽度适应边界 */
+.images-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.step-item-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 第二步图片保持较小大小 */
+#step-2 .images-container {
+  max-width: 300px;
+}
+
+.step-item-description {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* 返回首页按钮容器 */
+.return-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.btn-primary {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #4facfe;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #3a9cee;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .pay-header {
+    padding: 1.5rem 1rem;
+  }
+  
+  .pay-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .step-item-header {
+    padding: 1rem;
+  }
+  
+  .step-item-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .step-item-content {
+    padding: 1rem;
+  }
+  
+  .step-item-description {
+    font-size: 1rem;
+  }
+  
+  /* 第二步图片在移动设备上进一步缩小 */
+  #step-2 .step-item-image {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pay-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .step-number-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+  
+  .step-item-header h2 {
+    font-size: 1.1rem;
+  }
+}

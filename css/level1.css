@@ -118,10 +118,10 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* 内容包装器 - 图片和文字上下布局 */
+/* 内容包装器 - 图片和文字上下布局（文字在上） */
 .content-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
 }
 
