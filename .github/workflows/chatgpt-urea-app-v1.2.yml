@@ -1,0 +1,53 @@
+name: ChatGPT Urea App V1.2 Build
+
+on:
+  push:
+    branches:
+      - "chatgpt/urea-app-v1.2-build"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Extract Android source
+        run: |
+          rm -rf /tmp/urea-build
+          mkdir -p /tmp/urea-build
+          unzip -q chatgpt_build/UreaClientApp-source-v1.2.0.zip -d /tmp/urea-build
+          test -f /tmp/urea-build/UreaClientApp-v1.2.0/settings.gradle
+
+      - name: Build directly installable debug APK
+        working-directory: /tmp/urea-build/UreaClientApp-v1.2.0
+        run: |
+          gradle --no-daemon clean assembleDebug
+          mkdir -p "$GITHUB_WORKSPACE/chatgpt_build/output"
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/chatgpt_build/output/UreaClientApp-v1.2.0-debug.apk"
+          sha256sum "$GITHUB_WORKSPACE/chatgpt_build/output/UreaClientApp-v1.2.0-debug.apk" > "$GITHUB_WORKSPACE/chatgpt_build/output/SHA256.txt"
+          unzip -t "$GITHUB_WORKSPACE/chatgpt_build/output/UreaClientApp-v1.2.0-debug.apk" >/dev/null
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: UreaClientApp-v1.2.0-debug-apk
+          path: chatgpt_build/output/*
+          if-no-files-found: error
+          retention-days: 1
