@@ -50,6 +50,17 @@ jobs:
           mkdir -p /tmp/appsrc
           unzip -q /tmp/UreaClientApp-source-v1.2.0.zip -d /tmp/appsrc
           test -f /tmp/appsrc/UreaClientApp/app/build.gradle
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('/tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/SalesBarChartView.java')
+          s = p.read_text()
+          old = '        setMinimumHeight(dp(190));'
+          new = '        setMinimumHeight(Math.round(dp(190)));'
+          if old not in s:
+              raise SystemExit('expected SalesBarChartView source line not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+          grep -F 'setMinimumHeight(Math.round(dp(190)));' /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/SalesBarChartView.java
 
       - name: Build unsigned release APK
         working-directory: /tmp/appsrc/UreaClientApp
