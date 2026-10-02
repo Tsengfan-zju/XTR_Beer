@@ -1,0 +1,71 @@
+name: ChatGPT Android Build
+
+on:
+  push:
+    branches:
+      - chatgpt/app-v1.2.0-build
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout temporary build branch
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 35 build tools
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Recreate and verify APP source
+        run: |
+          cat chatgpt-build/UreaClientApp-source-v1.2.0.zip.b64.* > /tmp/app.zip.b64
+          base64 --decode /tmp/app.zip.b64 > /tmp/UreaClientApp-source-v1.2.0.zip
+          echo "79ad1e4c913be18f5e41e838775f1c6e3ad7d4b0da764d21ff663f7a262d7566  /tmp/UreaClientApp-source-v1.2.0.zip" | sha256sum -c -
+          mkdir -p /tmp/appsrc
+          unzip -q /tmp/UreaClientApp-source-v1.2.0.zip -d /tmp/appsrc
+          test -f /tmp/appsrc/UreaClientApp/app/build.gradle
+
+      - name: Build unsigned release APK
+        working-directory: /tmp/appsrc/UreaClientApp
+        run: gradle --no-daemon --stacktrace clean assembleRelease
+
+      - name: Collect unsigned APK and Android signing tools
+        run: |
+          set -euxo pipefail
+          mkdir -p /tmp/artifact
+          APK="$(find /tmp/appsrc/UreaClientApp/app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -1)"
+          test -n "$APK"
+          cp "$APK" /tmp/artifact/UreaClientApp-v1.2.0-release-unsigned.apk
+          BT="$ANDROID_HOME/build-tools/35.0.0"
+          test -x "$BT/apksigner"
+          test -x "$BT/zipalign"
+          tar -C "$ANDROID_HOME/build-tools" -czf /tmp/artifact/android-build-tools-35.0.0.tar.gz 35.0.0
+          sha256sum /tmp/artifact/UreaClientApp-v1.2.0-release-unsigned.apk /tmp/artifact/android-build-tools-35.0.0.tar.gz > /tmp/artifact/SHA256SUMS.txt
+          ls -lh /tmp/artifact
+
+      - name: Upload unsigned build
+        uses: actions/upload-artifact@v4
+        with:
+          name: UreaClientApp-v1.2.0-unsigned-build
+          path: /tmp/artifact/
+          if-no-files-found: error
+          retention-days: 1
