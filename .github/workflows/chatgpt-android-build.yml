@@ -64,7 +64,7 @@ jobs:
           echo "73ea9a9652114c251b8f65feeec27340039e7803c277696443b8efaf7221b2c0  /tmp/v130-overlay.tar.gz" | sha256sum -c -
           tar -xzf /tmp/v130-overlay.tar.gz -C /tmp/appsrc/UreaClientApp
           grep -F 'versionCode 4' /tmp/appsrc/UreaClientApp/app/build.gradle
-          grep -F 'versionName "1.3.0"' /tmp/appsrc/UreaClientApp/app/build.gradle
+          grep -F "versionName '1.3.0'" /tmp/appsrc/UreaClientApp/app/build.gradle
           test -f /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/MyActivity.java
           test -f /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
           test -f /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/BaseActivity.java
