@@ -1,9 +1,9 @@
-name: ChatGPT Android Build V1.3.0
+name: ChatGPT Android Build V1.4.0
 
 on:
   push:
     branches:
-      - chatgpt/app-v1.3.0-ci
+      - chatgpt/app-v1.4.0-ci
 
 permissions:
   contents: read
@@ -41,7 +41,7 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Recreate V1.2.0 base and apply V1.3.0 overlay
+      - name: Recreate V1.3.0 and apply V1.4.0 overlay
         run: |
           set -euxo pipefail
           cat chatgpt-build/UreaClientApp-source-v1.2.0.zip.b64.* > /tmp/app.zip.b64
@@ -63,11 +63,22 @@ jobs:
           base64 --decode /tmp/v130-overlay.b64 > /tmp/v130-overlay.tar.gz
           echo "73ea9a9652114c251b8f65feeec27340039e7803c277696443b8efaf7221b2c0  /tmp/v130-overlay.tar.gz" | sha256sum -c -
           tar -xzf /tmp/v130-overlay.tar.gz -C /tmp/appsrc/UreaClientApp
-          grep -F 'versionCode 4' /tmp/appsrc/UreaClientApp/app/build.gradle
-          grep -F "versionName '1.3.0'" /tmp/appsrc/UreaClientApp/app/build.gradle
-          test -f /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/MyActivity.java
-          test -f /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
-          test -f /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/BaseActivity.java
+
+          cat chatgpt-build/v140-overlay2.b64.* > /tmp/v140-overlay.b64
+          base64 --decode /tmp/v140-overlay.b64 > /tmp/v140-overlay.tar.gz
+          echo "60b2b190362e3319b0f73690e96633be5356ca5acf706eec7243bb320023914f  /tmp/v140-overlay.tar.gz" | sha256sum -c -
+          tar -tzf /tmp/v140-overlay.tar.gz >/tmp/v140-files.txt
+          test -s /tmp/v140-files.txt
+          tar -xzf /tmp/v140-overlay.tar.gz -C /tmp/appsrc/UreaClientApp
+
+          grep -F 'versionCode 5' /tmp/appsrc/UreaClientApp/app/build.gradle
+          grep -F "versionName '1.4.0'" /tmp/appsrc/UreaClientApp/app/build.gradle
+          grep -F 'R.id.navHome' /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/BottomNavHelper.java
+          grep -F 'BottomNavHelper.HOME' /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/HomeActivity.java
+          grep -F 'searchDeviceButton' /tmp/appsrc/UreaClientApp/app/src/main/res/layout/activity_main.xml
+          grep -F 'showSearchDialog' /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/MainActivity.java
+          grep -F 'detailParamRemark' /tmp/appsrc/UreaClientApp/app/src/main/res/layout/activity_device_detail.xml
+          grep -F 'getDeviceConfig' /tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/DeviceDetailActivity.java
 
       - name: Build unsigned release APK
         working-directory: /tmp/appsrc/UreaClientApp
@@ -79,16 +90,15 @@ jobs:
           mkdir -p /tmp/artifact
           APK="$(find /tmp/appsrc/UreaClientApp/app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -1)"
           test -n "$APK"
-          cp "$APK" /tmp/artifact/UreaClientApp-v1.3.0-release-unsigned.apk
-          BT="$ANDROID_HOME/build-tools/35.0.0"
+          cp "$APK" /tmp/artifact/UreaClientApp-v1.4.0-release-unsigned.apk
           tar -C "$ANDROID_HOME/build-tools" -czf /tmp/artifact/android-build-tools-35.0.0.tar.gz 35.0.0
-          sha256sum /tmp/artifact/UreaClientApp-v1.3.0-release-unsigned.apk /tmp/artifact/android-build-tools-35.0.0.tar.gz > /tmp/artifact/SHA256SUMS.txt
+          sha256sum /tmp/artifact/UreaClientApp-v1.4.0-release-unsigned.apk /tmp/artifact/android-build-tools-35.0.0.tar.gz > /tmp/artifact/SHA256SUMS.txt
           ls -lh /tmp/artifact
 
       - name: Upload unsigned build
         uses: actions/upload-artifact@v4
         with:
-          name: UreaClientApp-v1.3.0-unsigned-build
+          name: UreaClientApp-v1.4.0-unsigned-build
           path: /tmp/artifact/
           if-no-files-found: error
           retention-days: 1
