@@ -84,35 +84,28 @@ jobs:
 
           main = Path('/tmp/appsrc/UreaClientApp/app/src/main/java/com/urea/selfservice/client/MainActivity.java')
           s = main.read_text()
-          old = '''            new AlertDialog.Builder(this)
-                    .setTitle("需要配置高德 Android Key")
-                    .setMessage("APK 已使用固定包名和发布签名。请在高德开放平台创建 Android 平台 Key，并在设置中填写后即可显示真实地图。设备数据仍可正常读取。")
-                    .setNegativeButton("稍后", null)
-                    .setPositiveButton("去设置", (d,w) -> startActivity(new Intent(this, MyActivity.class)))
-                    .show();'''
-          new = '''            new AlertDialog.Builder(this)
-                    .setTitle("地图服务尚未配置")
-                    .setMessage("服务器尚未下发高德 Android Key。请联系平台管理员，在运营后台“设备分布 → 地图配置”中填写 Android SDK Key。设备列表和其他业务数据仍可正常使用。")
-                    .setPositiveButton("知道了", null)
-                    .show();'''
-          assert old in s, 'MainActivity map dialog baseline not found'
-          s = s.replace(old, new, 1)
-          old2 = 'if (Prefs.amapKey(this).trim().isEmpty()) { Toast.makeText(this, "请先在设置中填写高德 Android Key", Toast.LENGTH_SHORT).show(); return; }'
-          new2 = 'if (Prefs.amapKey(this).trim().isEmpty()) { Toast.makeText(this, "服务器尚未配置高德 Android Key，请联系平台管理员", Toast.LENGTH_SHORT).show(); return; }'
-          assert old2 in s, 'MainActivity locate baseline not found'
-          main.write_text(s.replace(old2, new2, 1))
+          replacements = [
+              ('需要配置高德 Android Key', '地图服务尚未配置'),
+              ('APK 已使用固定包名和发布签名。请在高德开放平台创建 Android 平台 Key，并在设置中填写后即可显示真实地图。设备数据仍可正常读取。', '服务器尚未下发高德 Android Key。请联系平台管理员，在运营后台“设备分布 → 地图配置”中填写 Android SDK Key。设备列表和其他业务数据仍可正常使用。'),
+              ('.setNegativeButton("稍后", null)\n', ''),
+              ('.setPositiveButton("去设置", (d,w) -> startActivity(new Intent(this, MyActivity.class)))', '.setPositiveButton("知道了", null)'),
+              ('请先在设置中填写高德 Android Key', '服务器尚未配置高德 Android Key，请联系平台管理员'),
+          ]
+          for old, new in replacements:
+              assert old in s, f'MainActivity baseline token not found: {old[:30]}'
+              s = s.replace(old, new, 1)
+          main.write_text(s)
 
           my = Path('/tmp/appsrc/UreaClientApp/app/src/main/res/layout/activity_my.xml')
           x = my.read_text()
-          old3 = 'android:text="连接设置" android:textColor="@color/text_primary"'
-          new3 = 'android:text="应用与连接" android:textColor="@color/text_primary"'
-          old4 = 'android:text="服务器与地图服务" android:textColor="@color/text_secondary"'
-          new4 = 'android:text="服务器与地图服务 · 自动配置" android:textColor="@color/text_secondary"'
-          old5 = '<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:gravity="center" android:text="版本 1.5.0" android:textColor="@color/text_secondary" android:textSize="12sp"/>'
-          new5 = '<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:gravity="center" android:id="@+id/appVersionText" android:text="版本 1.5.1" android:textColor="@color/text_secondary" android:textSize="12sp"/>'
-          for label, oldv in [('title', old3), ('summary', old4), ('version', old5)]:
-              assert oldv in x, f'activity_my {label} baseline not found'
-          x = x.replace(old3, new3, 1).replace(old4, new4, 1).replace(old5, new5, 1)
+          replacements = [
+              ('android:text="连接设置" android:textColor="@color/text_primary"', 'android:text="应用与连接" android:textColor="@color/text_primary"'),
+              ('android:text="服务器与地图服务" android:textColor="@color/text_secondary"', 'android:text="服务器与地图服务 · 自动配置" android:textColor="@color/text_secondary"'),
+              ('<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:gravity="center" android:text="版本 1.5.0" android:textColor="@color/text_secondary" android:textSize="12sp"/>', '<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:gravity="center" android:id="@+id/appVersionText" android:text="版本 1.5.1" android:textColor="@color/text_secondary" android:textSize="12sp"/>'),
+          ]
+          for old, new in replacements:
+              assert old in x, f'activity_my baseline token not found: {old[:40]}'
+              x = x.replace(old, new, 1)
           my.write_text(x)
           PY
 
