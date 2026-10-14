@@ -1,4 +1,4 @@
-name: ChatGPT Recover Urea Android V1.5.1
+name: ChatGPT Android Build V1.5.2
 
 on:
   push:
@@ -129,40 +129,62 @@ jobs:
           test ! -e app/src/main/res/layout/activity_settings.xml
           test ! -e app/src/main/res/layout/dialog_connection_settings.xml
 
-      - name: Package reconstructed V1.5.1 source
+      - name: Apply V1.5.2 home sales dashboard overlay
+        run: |
+          set -euxo pipefail
+          cat chatgpt-build/v152-overlay.b64.* > /tmp/v152-overlay.b64
+          base64 --decode /tmp/v152-overlay.b64 > /tmp/v152-overlay.tar.gz
+          echo "2326eff6683be6f466816707fc21cc87bfcfc717d541a04d3a2cad5302b1dd53  /tmp/v152-overlay.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/v152-overlay.tar.gz -C /tmp/appsrc/UreaClientApp
+          cd /tmp/appsrc/UreaClientApp
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          for p in Path('app/src/main/res').rglob('*.xml'):
+              ET.parse(p)
+          ET.parse('app/src/main/AndroidManifest.xml')
+          PY
+          grep -F 'versionCode 8' app/build.gradle
+          grep -F "versionName '1.5.2'" app/build.gradle
+          grep -F '/api/app/bootstrap' app/src/main/java/com/urea/selfservice/client/BootstrapManager.java
+          grep -F 'class SalesBarChartView' app/src/main/java/com/urea/selfservice/client/SalesBarChartView.java
+          grep -F 'homeChipToday' app/src/main/res/layout/activity_home.xml
+          grep -F 'homeChipYesterday' app/src/main/res/layout/activity_home.xml
+          grep -F 'homeChip7' app/src/main/res/layout/activity_home.xml
+          grep -F 'homeChip30' app/src/main/res/layout/activity_home.xml
+          grep -F 'homeChipCustom' app/src/main/res/layout/activity_home.xml
+          grep -F 'getSalesRange' app/src/main/java/com/urea/selfservice/client/ApiClient.java
+          grep -F '服务器与地图服务 · 自动配置' app/src/main/res/layout/activity_my.xml
+          test ! -e app/src/main/java/com/urea/selfservice/client/SettingsActivity.java
+
+      - name: Package V1.5.2 source
         run: |
           set -euxo pipefail
           cd /tmp/appsrc
-          zip -qr /tmp/UreaClientApp-source-v1.5.1-recovered.zip UreaClientApp
-          sha256sum /tmp/UreaClientApp-source-v1.5.1-recovered.zip
-
-      - name: Upload reconstructed V1.5.1 source
-        uses: actions/upload-artifact@v4
-        with:
-          name: UreaClientApp-v1.5.1-recovered-source
-          path: /tmp/UreaClientApp-source-v1.5.1-recovered.zip
-          if-no-files-found: error
-          retention-days: 3
+          zip -qr /tmp/UreaClientApp-source-v1.5.2.zip UreaClientApp
+          sha256sum /tmp/UreaClientApp-source-v1.5.2.zip
 
       - name: Build unsigned release APK
         working-directory: /tmp/appsrc/UreaClientApp
         run: gradle --no-daemon --stacktrace clean assembleRelease
 
-      - name: Collect unsigned APK and Android signing tools
+      - name: Align and collect V1.5.2 artifacts
         run: |
           set -euxo pipefail
           mkdir -p /tmp/artifact
           APK="$(find /tmp/appsrc/UreaClientApp/app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -1)"
           test -n "$APK"
-          cp "$APK" /tmp/artifact/UreaClientApp-v1.5.1-release-unsigned.apk
-          tar -C "$ANDROID_HOME/build-tools" -czf /tmp/artifact/android-build-tools-35.0.0.tar.gz 35.0.0
-          sha256sum /tmp/artifact/UreaClientApp-v1.5.1-release-unsigned.apk /tmp/artifact/android-build-tools-35.0.0.tar.gz > /tmp/artifact/SHA256SUMS.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4 "$APK" /tmp/artifact/UreaClientApp-v1.5.2-release-aligned-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 /tmp/artifact/UreaClientApp-v1.5.2-release-aligned-unsigned.apk | tail -5
+          cp /tmp/UreaClientApp-source-v1.5.2.zip /tmp/artifact/
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" /tmp/artifact/
+          sha256sum /tmp/artifact/* > /tmp/artifact/SHA256SUMS.txt
           ls -lh /tmp/artifact
 
-      - name: Upload unsigned build
+      - name: Upload V1.5.2 build
         uses: actions/upload-artifact@v4
         with:
-          name: UreaClientApp-v1.5.1-unsigned-build
+          name: UreaClientApp-v1.5.2-build
           path: /tmp/artifact/
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 3
