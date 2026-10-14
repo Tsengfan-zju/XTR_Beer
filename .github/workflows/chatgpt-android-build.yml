@@ -1,9 +1,9 @@
-name: ChatGPT Android Build V1.5.1
+name: ChatGPT Recover Urea Android V1.5.1
 
 on:
   push:
     branches:
-      - chatgpt/app-v1.5.1-text-ci
+      - chatgpt/app-v1.5.2-ci
 
 permissions:
   contents: read
@@ -128,6 +128,21 @@ jobs:
           test ! -e app/src/main/java/com/urea/selfservice/client/SettingsActivity.java
           test ! -e app/src/main/res/layout/activity_settings.xml
           test ! -e app/src/main/res/layout/dialog_connection_settings.xml
+
+      - name: Package reconstructed V1.5.1 source
+        run: |
+          set -euxo pipefail
+          cd /tmp/appsrc
+          zip -qr /tmp/UreaClientApp-source-v1.5.1-recovered.zip UreaClientApp
+          sha256sum /tmp/UreaClientApp-source-v1.5.1-recovered.zip
+
+      - name: Upload reconstructed V1.5.1 source
+        uses: actions/upload-artifact@v4
+        with:
+          name: UreaClientApp-v1.5.1-recovered-source
+          path: /tmp/UreaClientApp-source-v1.5.1-recovered.zip
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Build unsigned release APK
         working-directory: /tmp/appsrc/UreaClientApp
