@@ -1,0 +1,10 @@
+--- a/app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
++++ b/app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
+@@ -126,2 +126,7 @@
+                 @Override public void onSuccess(JSONObject o) {
+                     progress.setVisibility(View.GONE);
++                    getSharedPreferences("device_business_snapshot_v1", MODE_PRIVATE).edit()
++                            .putString("home_title_" + deviceId, title)
++                            .putString("action_" + deviceId, action)
++                            .putInt("unit_ml_" + deviceId, mlPerUnit)
++                            .apply();
