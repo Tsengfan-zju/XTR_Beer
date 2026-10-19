@@ -1,0 +1,80 @@
+name: Urea Client V1.5.5 Build
+
+on:
+  push:
+    branches:
+      - chatgpt/app-v1.5.5-ci
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Prepare Android SDK
+        run: |
+          set -euxo pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Download V1.5.4 baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: UreaClientApp-v1.5.4-build
+          run-id: 39183429078
+          github-token: ${{ github.token }}
+          path: /tmp/v154
+
+      - name: Patch source
+        run: |
+          set -euxo pipefail
+          mkdir -p /tmp/appsrc
+          unzip -q /tmp/v154/UreaClientApp-source-v1.5.4.zip -d /tmp/appsrc
+          cd /tmp/appsrc/UreaClientApp
+          patch -p1 < "${GITHUB_WORKSPACE}/chatgpt-build/v155-name.patch"
+          patch -p1 < "${GITHUB_WORKSPACE}/chatgpt-build/v155-settings-load.patch"
+          patch -p1 < "${GITHUB_WORKSPACE}/chatgpt-build/v155-settings-save.patch"
+          patch -p1 < "${GITHUB_WORKSPACE}/chatgpt-build/v155-detail.patch"
+          patch -p1 < "${GITHUB_WORKSPACE}/chatgpt-build/v155-updater.patch"
+          grep -F 'versionCode 11' app/build.gradle
+          grep -F "versionName '1.5.5'" app/build.gradle
+          grep -F '智营管家' app/src/main/res/values/strings.xml
+          grep -F 'device_business_snapshot_v1' app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
+
+      - name: Build
+        run: |
+          set -euxo pipefail
+          cd /tmp/appsrc/UreaClientApp
+          gradle --no-daemon --stacktrace clean assembleRelease
+          cd /tmp/appsrc
+          zip -qr /tmp/UreaClientApp-source-v1.5.5.zip UreaClientApp
+          mkdir -p /tmp/out
+          APK="$(find UreaClientApp/app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -1)"
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4 "$APK" /tmp/out/UreaClientApp-v1.5.5-release-aligned-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 /tmp/out/UreaClientApp-v1.5.5-release-aligned-unsigned.apk
+          cp /tmp/UreaClientApp-source-v1.5.5.zip /tmp/out/
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" /tmp/out/
+          sha256sum /tmp/out/* > /tmp/out/SHA256SUMS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: UreaClientApp-v1.5.5-build
+          path: /tmp/out/
+          retention-days: 3
