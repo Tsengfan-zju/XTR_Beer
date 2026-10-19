@@ -1,0 +1,22 @@
+--- a/app/src/main/java/com/urea/selfservice/client/DeviceDetailActivity.java
++++ b/app/src/main/java/com/urea/selfservice/client/DeviceDetailActivity.java
+@@ -70,13 +70,21 @@
+                 String product = o.optString("product_name", "--");
+                 String spec = o.optString("product_spec", "--");
+                 double price = o.optDouble("price_per_unit", 0);
++                int unitMl = o.has("unit_ml") ? o.optInt("unit_ml", 0) : 0;
++                if (unitMl <= 0) unitMl = o.optInt("pricing_unit_ml", 0);
++                if (unitMl <= 0) unitMl = o.optInt("ui_unit_ml", 0);
++                if (unitMl <= 0) unitMl = getSharedPreferences("device_business_snapshot_v1", MODE_PRIVATE)
++                        .getInt("unit_ml_" + deviceId, 0);
+                 double capacity = o.optDouble("tank_capacity_l", 0);
+                 double threshold = o.optDouble("inventory_low_threshold_l", 0);
+                 String version = o.optString("config_version", o.optString("version", "--"));
+                 ((TextView)findViewById(R.id.detailConfigVersion)).setText("配置版本 " + version);
+                 ((TextView)findViewById(R.id.detailParamRemark)).setText("设备备注：" + safe(o.optString("remark_name", "")));
+                 ((TextView)findViewById(R.id.detailParamProduct)).setText("商品：" + product + " · " + spec + " · " + unit);
+-                ((TextView)findViewById(R.id.detailParamPrice)).setText("单价：" + String.format(Locale.CHINA, "¥ %.2f / %s", price, unit));
++                String priceText = unitMl > 0
++                        ? String.format(Locale.CHINA, "￥%.2f/%s·%dmL", price, unit, unitMl)
++                        : String.format(Locale.CHINA, "￥%.2f/%s", price, unit);
++                ((TextView)findViewById(R.id.detailParamPrice)).setText("单价：" + priceText);
