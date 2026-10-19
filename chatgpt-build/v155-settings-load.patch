@@ -1,0 +1,32 @@
+--- a/app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
++++ b/app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
+@@ -51,11 +51,29 @@
+                 progress.setVisibility(View.GONE);
+                 remark.setText(o.optString("remark_name", ""));
+                 productName.setText(o.optString("product_name", ""));
+-                homeTitle.setText(firstNonEmpty(o.optString("home_title", ""), o.optString("ui_home_title", "")));
+-                businessAction.setText(firstNonEmpty(o.optString("action", ""), o.optString("business_action", ""), o.optString("ui_action", "")));
++                String serverTitle = firstNonEmpty(o.optString("home_title", ""), o.optString("ui_home_title", ""), o.optString("homeTitle", ""));
++                String serverAction = firstNonEmpty(o.optString("action", ""), o.optString("business_action", ""), o.optString("ui_action", ""), o.optString("businessAction", ""));
++                int serverUnitMl = o.has("unit_ml") ? o.optInt("unit_ml", 0) : 0;
++                if (serverUnitMl <= 0) serverUnitMl = o.optInt("pricing_unit_ml", 0);
++                if (serverUnitMl <= 0) serverUnitMl = o.optInt("ui_unit_ml", 0);
++                android.content.SharedPreferences snapshot = getSharedPreferences("device_business_snapshot_v1", MODE_PRIVATE);
++                String cachedTitle = snapshot.getString("home_title_" + deviceId, "");
++                String cachedAction = snapshot.getString("action_" + deviceId, "");
++                int cachedUnitMl = snapshot.getInt("unit_ml_" + deviceId, 0);
++                String titleValue = firstNonEmpty(serverTitle, cachedTitle);
++                String actionValue = firstNonEmpty(serverAction, cachedAction);
++                int unitMlValue = serverUnitMl > 0 ? serverUnitMl : cachedUnitMl;
++                homeTitle.setText(titleValue);
++                businessAction.setText(actionValue);
+                 unit.setText(o.optString("product_unit", "L"));
+-                int unitMlValue = o.has("unit_ml") ? o.optInt("unit_ml", 0) : o.optInt("pricing_unit_ml", 0);
+                 unitMl.setText(unitMlValue > 0 ? String.valueOf(unitMlValue) : "");
++                if (!serverTitle.isEmpty() || !serverAction.isEmpty() || serverUnitMl > 0) {
++                    android.content.SharedPreferences.Editor ed = snapshot.edit();
++                    if (!serverTitle.isEmpty()) ed.putString("home_title_" + deviceId, serverTitle);
++                    if (!serverAction.isEmpty()) ed.putString("action_" + deviceId, serverAction);
++                    if (serverUnitMl > 0) ed.putInt("unit_ml_" + deviceId, serverUnitMl);
++                    ed.apply();
++                }
