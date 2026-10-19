@@ -1,0 +1,13 @@
+--- a/app/src/main/java/com/urea/selfservice/client/AppUpdateDownloader.java
++++ b/app/src/main/java/com/urea/selfservice/client/AppUpdateDownloader.java
+@@ -80,7 +80,7 @@
+         if (pendingApk.exists()) pendingApk.delete();
+ 
+         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(resolved));
+-        request.setTitle("尿素智营更新 " + (versionName == null ? "" : versionName));
++        request.setTitle(activity.getString(R.string.app_name) + "更新 " + (versionName == null ? "" : versionName));
+@@ -142,7 +142,7 @@
+     private void requestInstallPermissionOrOpen() {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !activity.getPackageManager().canRequestPackageInstalls()) {
+-            Toast.makeText(activity, "请允许尿素智营安装未知应用，返回后将继续安装", Toast.LENGTH_LONG).show();
++            Toast.makeText(activity, "请允许" + activity.getString(R.string.app_name) + "安装未知应用，返回后将继续安装", Toast.LENGTH_LONG).show();
