@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">智营管家</string>
+    <string name="amap_privacy_text">本应用使用高德开放平台地图/定位 SDK（北京高德图强科技有限公司）用于设备地图展示、当前位置、附近设备与导航。SDK 可能根据您授权的功能处理经纬度、网络与设备信息。点击“同意并继续”表示您已阅读并同意本应用隐私说明及高德地图开放平台隐私权政策。</string>
+</resources>
