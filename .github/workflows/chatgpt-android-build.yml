@@ -1,9 +1,9 @@
-name: ChatGPT Android Build V1.5.3
+name: ChatGPT Android Build V1.5.4
 
 on:
   push:
     branches:
-      - chatgpt/app-v1.5.3-ci
+      - chatgpt/app-v1.5.4-ci
 
 permissions:
   contents: read
@@ -170,34 +170,52 @@ jobs:
           grep -F 'class ServerConfigDialog' app/src/main/java/com/urea/selfservice/client/ServerConfigDialog.java
           grep -F 'class AppUpdateDownloader' app/src/main/java/com/urea/selfservice/client/AppUpdateDownloader.java
 
-      - name: Package V1.5.3 source
+      - name: Apply V1.5.4 device business fields and login keyboard overlay
+        run: |
+          set -euxo pipefail
+          cat chatgpt-build/v154-overlay.b64.* > /tmp/v154-overlay.b64
+          base64 --decode /tmp/v154-overlay.b64 > /tmp/v154-overlay.tar.gz
+          echo "e3a0664f81d6dae67a794a4d307da3d004d81606362649f7d20bbf03b88ae657  /tmp/v154-overlay.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/v154-overlay.tar.gz -C /tmp/appsrc/UreaClientApp
+          cd /tmp/appsrc/UreaClientApp
+          grep -F 'versionCode 10' app/build.gradle
+          grep -F "versionName '1.5.4'" app/build.gradle
+          grep -F 'deviceParamHomeTitle' app/src/main/res/layout/activity_device_settings.xml
+          grep -F 'deviceParamBusinessAction' app/src/main/res/layout/activity_device_settings.xml
+          grep -F 'deviceParamUnitMl' app/src/main/res/layout/activity_device_settings.xml
+          grep -F 'home_title' app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
+          grep -F 'unit_ml' app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
+          grep -F 'adjustResize' app/src/main/AndroidManifest.xml
+          grep -F 'revealLoginInputs' app/src/main/java/com/urea/selfservice/client/LoginActivity.java
+
+      - name: Package V1.5.4 source
         run: |
           set -euxo pipefail
           cd /tmp/appsrc
-          zip -qr /tmp/UreaClientApp-source-v1.5.3.zip UreaClientApp
-          sha256sum /tmp/UreaClientApp-source-v1.5.3.zip
+          zip -qr /tmp/UreaClientApp-source-v1.5.4.zip UreaClientApp
+          sha256sum /tmp/UreaClientApp-source-v1.5.4.zip
 
       - name: Build unsigned release APK
         working-directory: /tmp/appsrc/UreaClientApp
         run: gradle --no-daemon --stacktrace clean assembleRelease
 
-      - name: Align and collect V1.5.3 artifacts
+      - name: Align and collect V1.5.4 artifacts
         run: |
           set -euxo pipefail
           mkdir -p /tmp/artifact
           APK="$(find /tmp/appsrc/UreaClientApp/app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' | head -1)"
           test -n "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4 "$APK" /tmp/artifact/UreaClientApp-v1.5.3-release-aligned-unsigned.apk
-          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 /tmp/artifact/UreaClientApp-v1.5.3-release-aligned-unsigned.apk | tail -5
-          cp /tmp/UreaClientApp-source-v1.5.3.zip /tmp/artifact/
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4 "$APK" /tmp/artifact/UreaClientApp-v1.5.4-release-aligned-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 /tmp/artifact/UreaClientApp-v1.5.4-release-aligned-unsigned.apk | tail -5
+          cp /tmp/UreaClientApp-source-v1.5.4.zip /tmp/artifact/
           cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" /tmp/artifact/
           sha256sum /tmp/artifact/* > /tmp/artifact/SHA256SUMS.txt
           ls -lh /tmp/artifact
 
-      - name: Upload V1.5.3 build
+      - name: Upload V1.5.4 build
         uses: actions/upload-artifact@v4
         with:
-          name: UreaClientApp-v1.5.3-build
+          name: UreaClientApp-v1.5.4-build
           path: /tmp/artifact/
           if-no-files-found: error
           retention-days: 3
