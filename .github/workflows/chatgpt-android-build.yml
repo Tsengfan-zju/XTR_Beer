@@ -188,22 +188,116 @@ jobs:
           grep -F 'adjustResize' app/src/main/AndroidManifest.xml
           grep -F 'revealLoginInputs' app/src/main/java/com/urea/selfservice/client/LoginActivity.java
 
-      - name: Apply V1.5.5 naming, snapshot and price-format overlay
+      - name: Apply V1.5.5 naming, snapshot and price-format patch
         run: |
           set -euxo pipefail
-          cat chatgpt-build/v155-overlay.b64.* > /tmp/v155-overlay.b64
-          base64 --decode /tmp/v155-overlay.b64 > /tmp/v155-overlay.tar.gz
-          echo "a74bcdd2375fb80e9813c68092d40f6615d4d170e249ce66994fa6aeaa9e59c5  /tmp/v155-overlay.tar.gz" | sha256sum -c -
-          tar -xzf /tmp/v155-overlay.tar.gz -C /tmp/appsrc/UreaClientApp
           cd /tmp/appsrc/UreaClientApp
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p=Path('app/build.gradle')
+          s=p.read_text()
+          assert 'versionCode 10' in s and "versionName '1.5.4'" in s
+          p.write_text(s.replace('versionCode 10','versionCode 11').replace("versionName '1.5.4'","versionName '1.5.5'"))
+
+          p=Path('app/src/main/res/values/strings.xml')
+          s=p.read_text()
+          assert '<string name="app_name">尿素智营</string>' in s
+          p.write_text(s.replace('<string name="app_name">尿素智营</string>','<string name="app_name">智营管家</string>'))
+
+          p=Path('app/src/main/res/layout/activity_login.xml')
+          s=p.read_text()
+          assert 'android:text="尿素智营"' in s
+          p.write_text(s.replace('android:text="尿素智营"','android:text="@string/app_name"'))
+
+          p=Path('app/src/main/java/com/urea/selfservice/client/AppUpdateDownloader.java')
+          s=p.read_text()
+          assert 'request.setTitle("尿素智营更新 " + (versionName == null ? "" : versionName));' in s
+          assert 'Toast.makeText(activity, "请允许尿素智营安装未知应用，返回后将继续安装", Toast.LENGTH_LONG).show();' in s
+          s=s.replace('request.setTitle("尿素智营更新 " + (versionName == null ? "" : versionName));',
+                      'request.setTitle(activity.getString(R.string.app_name) + "更新 " + (versionName == null ? "" : versionName));')
+          s=s.replace('Toast.makeText(activity, "请允许尿素智营安装未知应用，返回后将继续安装", Toast.LENGTH_LONG).show();',
+                      'Toast.makeText(activity, "请允许" + activity.getString(R.string.app_name) + "安装未知应用，返回后将继续安装", Toast.LENGTH_LONG).show();')
+          p.write_text(s)
+
+          p=Path('app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java')
+          s=p.read_text()
+          old='''                homeTitle.setText(firstNonEmpty(o.optString("home_title", ""), o.optString("ui_home_title", "")));
+                businessAction.setText(firstNonEmpty(o.optString("action", ""), o.optString("business_action", ""), o.optString("ui_action", "")));
+                unit.setText(o.optString("product_unit", "L"));
+                int unitMlValue = o.has("unit_ml") ? o.optInt("unit_ml", 0) : o.optInt("pricing_unit_ml", 0);
+                unitMl.setText(unitMlValue > 0 ? String.valueOf(unitMlValue) : "");
+'''
+          new='''                String serverTitle = firstNonEmpty(o.optString("home_title", ""), o.optString("ui_home_title", ""), o.optString("homeTitle", ""));
+                String serverAction = firstNonEmpty(o.optString("action", ""), o.optString("business_action", ""), o.optString("ui_action", ""), o.optString("businessAction", ""));
+                int serverUnitMl = o.has("unit_ml") ? o.optInt("unit_ml", 0) : 0;
+                if (serverUnitMl <= 0) serverUnitMl = o.optInt("pricing_unit_ml", 0);
+                if (serverUnitMl <= 0) serverUnitMl = o.optInt("ui_unit_ml", 0);
+                android.content.SharedPreferences snapshot = getSharedPreferences("device_business_snapshot_v1", MODE_PRIVATE);
+                String cachedTitle = snapshot.getString("home_title_" + deviceId, "");
+                String cachedAction = snapshot.getString("action_" + deviceId, "");
+                int cachedUnitMl = snapshot.getInt("unit_ml_" + deviceId, 0);
+                String titleValue = firstNonEmpty(serverTitle, cachedTitle);
+                String actionValue = firstNonEmpty(serverAction, cachedAction);
+                int unitMlValue = serverUnitMl > 0 ? serverUnitMl : cachedUnitMl;
+                homeTitle.setText(titleValue);
+                businessAction.setText(actionValue);
+                unit.setText(o.optString("product_unit", "L"));
+                unitMl.setText(unitMlValue > 0 ? String.valueOf(unitMlValue) : "");
+                if (!serverTitle.isEmpty() || !serverAction.isEmpty() || serverUnitMl > 0) {
+                    android.content.SharedPreferences.Editor ed = snapshot.edit();
+                    if (!serverTitle.isEmpty()) ed.putString("home_title_" + deviceId, serverTitle);
+                    if (!serverAction.isEmpty()) ed.putString("action_" + deviceId, serverAction);
+                    if (serverUnitMl > 0) ed.putInt("unit_ml_" + deviceId, serverUnitMl);
+                    ed.apply();
+                }
+'''
+          assert old in s
+          s=s.replace(old,new,1)
+          old2='''                    progress.setVisibility(View.GONE);
+                    setResult(RESULT_OK);
+'''
+          new2='''                    progress.setVisibility(View.GONE);
+                    getSharedPreferences("device_business_snapshot_v1", MODE_PRIVATE).edit()
+                            .putString("home_title_" + deviceId, title)
+                            .putString("action_" + deviceId, action)
+                            .putInt("unit_ml_" + deviceId, mlPerUnit)
+                            .apply();
+                    setResult(RESULT_OK);
+'''
+          assert old2 in s
+          p.write_text(s.replace(old2,new2,1))
+
+          p=Path('app/src/main/java/com/urea/selfservice/client/DeviceDetailActivity.java')
+          s=p.read_text()
+          old='''                double price = o.optDouble("price_per_unit", 0);
+                double capacity = o.optDouble("tank_capacity_l", 0);
+'''
+          new='''                double price = o.optDouble("price_per_unit", 0);
+                int unitMl = o.has("unit_ml") ? o.optInt("unit_ml", 0) : 0;
+                if (unitMl <= 0) unitMl = o.optInt("pricing_unit_ml", 0);
+                if (unitMl <= 0) unitMl = o.optInt("ui_unit_ml", 0);
+                if (unitMl <= 0) unitMl = getSharedPreferences("device_business_snapshot_v1", MODE_PRIVATE)
+                        .getInt("unit_ml_" + deviceId, 0);
+                double capacity = o.optDouble("tank_capacity_l", 0);
+'''
+          assert old in s
+          s=s.replace(old,new,1)
+          old2='''                ((TextView)findViewById(R.id.detailParamPrice)).setText("单价：" + String.format(Locale.CHINA, "¥ %.2f / %s", price, unit));
+'''
+          new2='''                String priceText = unitMl > 0
+                        ? String.format(Locale.CHINA, "￥%.2f/%s·%dmL", price, unit, unitMl)
+                        : String.format(Locale.CHINA, "￥%.2f/%s", price, unit);
+                ((TextView)findViewById(R.id.detailParamPrice)).setText("单价：" + priceText);
+'''
+          assert old2 in s
+          p.write_text(s.replace(old2,new2,1))
+          PY
           grep -F 'versionCode 11' app/build.gradle
           grep -F "versionName '1.5.5'" app/build.gradle
           grep -F '<string name="app_name">智营管家</string>' app/src/main/res/values/strings.xml
-          grep -F 'class DeviceBusinessSnapshotStore' app/src/main/java/com/urea/selfservice/client/DeviceBusinessSnapshotStore.java
+          grep -F 'device_business_snapshot_v1' app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
           grep -F '￥%.2f/%s·%dmL' app/src/main/java/com/urea/selfservice/client/DeviceDetailActivity.java
-          grep -F 'DeviceBusinessSnapshotStore.save' app/src/main/java/com/urea/selfservice/client/DeviceSettingsActivity.java
-          test -s signing/urea-client-release.jks
-          test -s signing/urea-client-release-password.txt
 
       - name: Package V1.5.5 source
         run: |
